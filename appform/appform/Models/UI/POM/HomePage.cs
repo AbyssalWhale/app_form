@@ -66,6 +66,20 @@ namespace appform.Models.UI.POM
             return this;
         }
 
+        public async Task<HomePage> AttachAvatar(string path)
+        {
+            var element = Page.GetByRole(AriaRole.Button, new() { Name = "avatar" });
+            if (File.Exists(path))
+            {
+                await Page.SetInputFilesAsync("input[name=avatar]", path);
+            }
+            else
+            {
+                throw new FileNotFoundException($"Unable to locate file (avatar) with path: {path}");
+            }
+            return this;
+        }
+
         public async Task<HomePage> UnlockSlider()
         {
             var element = await Page.QuerySelectorAsync("//form[@method='POST']");

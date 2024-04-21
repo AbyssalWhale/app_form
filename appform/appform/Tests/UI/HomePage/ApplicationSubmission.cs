@@ -90,6 +90,30 @@ namespace appform.Tests.UI.HomePage
             await Console.Out.WriteLineAsync("");
         }
 
+        [Test]
+        [Description("Test the form with various types of images for the avatar and verify that the uploaded image is correctly displayed on the success page.")]
+        [TestCase("avatar_smal.jpg")]
+        [TestCase("avatar_mid.jpg")]
+        [TestCase("avatar_large.jpg")]
+        public async Task TestCase4(string avatarName)
+        {
+            // Arrange
+            var avatarPath = Path.Combine(Path.GetFullPath(@"..\..\..\..\"), "appform", "TestsData", avatarName);
+
+            // Act
+            await FillRequiredFields(FirstName, LastName, Email, Password, PasswordConfirmed);
+            await HomePage.AttachAvatar(avatarPath);
+            await HomePage.UnlockSlider();
+            var formSubmissionsPage = await HomePage.ClickSubmitButton();
+
+            // Assert
+            var isTitleMatched = await formSubmissionsPage.IsTitleMatchedWithExpected();
+            isTitleMatched.ShouldBeTrue($"page title is not matching with expected: {formSubmissionsPage.Title}");
+
+            var isAvatarMatched = await formSubmissionsPage.IsAvatarMatched(pathToExpectedAvatar: avatarPath);
+            isAvatarMatched.ShouldBeTrue($"It's expected that uploaded avatar on the page: {formSubmissionsPage.Title} is identical to submitted avatar");
+        }
+
         private async Task FillRequiredFields(string firstName, string lastName, string email, string pass, string passConfirmed)
         {
             await HomePage.InputFirstName(firstName);
