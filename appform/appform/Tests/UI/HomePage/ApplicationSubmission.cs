@@ -27,11 +27,7 @@ namespace appform.Tests.UI.HomePage
         public async Task TestCase1()
         {
             // Act
-            await HomePage.InputFirstName(FirstName);
-            await HomePage.InputLastName(LastName);
-            await HomePage.InputEmail(Email);
-            await HomePage.InputPassword(Password);
-            await HomePage.InputConfirmPassword(PasswordConfirmed);
+            await FillRequiredFields(FirstName, LastName, Email, Password, PasswordConfirmed);
             await HomePage.UnlockSlider();
             var formSubmissionsPage = await HomePage.ClickSubmitButton();
 
@@ -64,11 +60,7 @@ namespace appform.Tests.UI.HomePage
             var passwordConfirmedExpected = passConfirmed is null ? PasswordConfirmed : passConfirmed;
 
             // Act
-            await HomePage.InputFirstName(firstNameExpected);
-            await HomePage.InputLastName(lastNameExpected);
-            await HomePage.InputEmail(emailExpected);
-            await HomePage.InputPassword(passwordExpected);
-            await HomePage.InputConfirmPassword(passwordConfirmedExpected);
+            await FillRequiredFields(firstNameExpected, lastNameExpected, emailExpected, passwordExpected, passwordConfirmedExpected);
             await HomePage.UnlockSlider();
             var formSubmissionsPage = await HomePage.ClickSubmitButton();
 
@@ -87,11 +79,7 @@ namespace appform.Tests.UI.HomePage
         public async Task TestCase3()
         {
             // Act
-            await HomePage.InputFirstName(FirstName);
-            await HomePage.InputLastName(LastName);
-            await HomePage.InputEmail(Email);
-            await HomePage.InputPassword(Password);
-            await HomePage.InputConfirmPassword(PasswordConfirmed);
+            await FillRequiredFields(FirstName, LastName, Email, Password, PasswordConfirmed);
             var formSubmissionsPage = await HomePage.ClickSubmitButton();
 
             // Assert
@@ -100,6 +88,15 @@ namespace appform.Tests.UI.HomePage
             var isVisisble = await HomePage.IsUnsolvedCaptchaErrorDisplayed();
             isVisisble.ShouldBeTrue("Expected that error is displayed on the page after sumbitting application with unsolved captcha");
             await Console.Out.WriteLineAsync("");
+        }
+
+        private async Task FillRequiredFields(string firstName, string lastName, string email, string pass, string passConfirmed)
+        {
+            await HomePage.InputFirstName(firstName);
+            await HomePage.InputLastName(lastName);
+            await HomePage.InputEmail(email);
+            await HomePage.InputPassword(pass);
+            await HomePage.InputConfirmPassword(passConfirmed);
         }
     }
 }
