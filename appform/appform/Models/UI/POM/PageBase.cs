@@ -1,5 +1,4 @@
-﻿using FluentAssert;
-using Microsoft.Playwright;
+﻿using Microsoft.Playwright;
 
 namespace appform.Models.UI.POM
 {
@@ -13,10 +12,15 @@ namespace appform.Models.UI.POM
             Page = page;
         }
 
-        public virtual async Task IsAtPage()
+        public virtual async Task<bool> IsTitleMatchedWithExpected()
         {
             var title = await Page.TitleAsync();
-            title.ShouldBeEqualTo(Title);
+            return title == Title;
+        }
+
+        public virtual async Task CloseBrowser()
+        {
+            await Page.CloseAsync();
         }
     }
 }
