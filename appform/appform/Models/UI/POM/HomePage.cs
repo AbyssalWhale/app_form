@@ -1,4 +1,5 @@
-﻿using Microsoft.Playwright;
+﻿using FluentAssert;
+using Microsoft.Playwright;
 
 namespace appform.Models.UI.POM
 {
@@ -14,7 +15,9 @@ namespace appform.Models.UI.POM
         public async Task<HomePage> Navigate()
         {
             await Page.GotoAsync(url: "https://qa-task.redvike.rocks/");
-            await IsAtPage();
+            var currentTitle = await IsTitleMatchedWithExpected();
+            currentTitle.ShouldBeTrue(errorMessage: $"page title is not matching with expected: {Title}");
+
             return this;
         }
 
@@ -84,6 +87,12 @@ namespace appform.Models.UI.POM
             await inputElement.ClickAsync();
 
             return  new FormSubmissionsPage(Page);
+        }
+
+        public async Task<bool> IsPassNotMatchedErrorDisplayed()
+        {
+            var element = await Page.QuerySelectorAsync("//li[text()='Passwords do not match!']");
+            return await element.IsVisibleAsync();
         }
     }
 }

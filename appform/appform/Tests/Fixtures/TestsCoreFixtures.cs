@@ -1,11 +1,6 @@
 ﻿using appform.Models.UI.POM;
 using Bogus;
 using Microsoft.Playwright;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace appform.Tests.Fixtures
 {
@@ -35,6 +30,12 @@ namespace appform.Tests.Fixtures
         {
             HomePage = new HomePage(page: await Browser.NewPageAsync());
             await HomePage.Navigate();
+        }
+
+        [TearDown]
+        public async Task TearDown()
+        {
+            await HomePage.CloseBrowser();
         }
 
         [OneTimeTearDown]

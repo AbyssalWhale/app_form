@@ -36,7 +36,8 @@ namespace appform.Tests.UI.HomePage
             var formSubmissionsPage = await HomePage.ClickSubmitButton();
 
             // Assert 
-            await formSubmissionsPage.IsAtPage();
+            var isTitleMatched = await formSubmissionsPage.IsTitleMatchedWithExpected();
+            isTitleMatched.ShouldBeTrue($"page title is not matching with expected: {formSubmissionsPage.Title}");
             var isHeaderDisplayed = await formSubmissionsPage.IsHeaderDisplayed();
             isHeaderDisplayed.ShouldBeEqualTo(true);
 
@@ -48,33 +49,37 @@ namespace appform.Tests.UI.HomePage
 
         [Test]
         [Description("Automate form submission with invalid data (e.g., mismatched passwords, invalid email format) and verify that the submission fails and appropriate validation messages are displayed.\r\n")]
-        public async Task TestCase2()
+        [TestCase("", null, null, null, null)]
+        [TestCase(null, "", null, null, null)]
+        [TestCase(null, null, "usergmail.com", null, null)]
+        [TestCase(null, null, null, "123123123", null)]
+        [TestCase(null, null, null, null, "123123123")]
+        public async Task TestCase2(string? firstName, string? lastName, string? email, string? pass, string? passConfirmed)
         {
             // Arrange
-            var firstName = Faker.Name.FirstName();
-            var lastName = Faker.Name.LastName();
-            var email = Faker.Person.Email;
-            var password = Faker.Internet.Password();
-            var passwordConfirmed = password;
+            var firstNameExpected = firstName is null ? FirstName : firstName;
+            var lastNameExpected = lastName is null ? LastName : lastName;
+            var emailExpected = email is null ? Email : email;
+            var passwordExpected = pass is null ? Password : pass;
+            var passwordConfirmedExpected = passConfirmed is null ? PasswordConfirmed : passConfirmed;
 
             // Act
-            await HomePage.InputFirstName(firstName);
-            await HomePage.InputLastName(lastName);
-            await HomePage.InputEmail(email);
-            await HomePage.InputPassword(password);
-            await HomePage.InputConfirmPassword(passwordConfirmed);
+            await HomePage.InputFirstName(firstNameExpected);
+            await HomePage.InputLastName(lastNameExpected);
+            await HomePage.InputEmail(emailExpected);
+            await HomePage.InputPassword(passwordExpected);
+            await HomePage.InputConfirmPassword(passwordConfirmedExpected);
             await HomePage.UnlockSlider();
             var formSubmissionsPage = await HomePage.ClickSubmitButton();
 
             // Assert 
-            await formSubmissionsPage.IsAtPage();
-            var isHeaderDisplayed = await formSubmissionsPage.IsHeaderDisplayed();
-            isHeaderDisplayed.ShouldBeEqualTo(true);
-
-            var firstNameActual = await formSubmissionsPage.GetName();
-            var emailActual = await formSubmissionsPage.GetEmail();
-            firstNameActual.ShouldBeEqualTo($"{firstName} {lastName}");
-            emailActual.ShouldBeEqualTo(email);
+            var isTitleMatched = await formSubmissionsPage.IsTitleMatchedWithExpected();
+            isTitleMatched.ShouldBeFalse($"expected page title: {HomePage.Title} after submitting form with missing required property");
+            if (pass is not null | passConfirmed is not null)
+            {
+                var isVisisble = await HomePage.IsPassNotMatchedErrorDisplayed();
+                isVisisble.ShouldBeTrue("Expected that error is displayed on the page when passwords are mismatched in submitted application");
+            }
         }
     }
 }
