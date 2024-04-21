@@ -81,5 +81,25 @@ namespace appform.Tests.UI.HomePage
                 isVisisble.ShouldBeTrue("Expected that error is displayed on the page when passwords are mismatched in submitted application");
             }
         }
+
+        [Test]
+        [Description("Test the slider captcha functionality by attempting form submission without sliding the captcha to the end and verify that the form submission is blocked.\r\n")]
+        public async Task TestCase3()
+        {
+            // Act
+            await HomePage.InputFirstName(FirstName);
+            await HomePage.InputLastName(LastName);
+            await HomePage.InputEmail(Email);
+            await HomePage.InputPassword(Password);
+            await HomePage.InputConfirmPassword(PasswordConfirmed);
+            var formSubmissionsPage = await HomePage.ClickSubmitButton();
+
+            // Assert
+            var isTitleMatched = await formSubmissionsPage.IsTitleMatchedWithExpected();
+            isTitleMatched.ShouldBeFalse($"expected page title: {HomePage.Title} after submitting form with unsolved captcha");
+            var isVisisble = await HomePage.IsUnsolvedCaptchaErrorDisplayed();
+            isVisisble.ShouldBeTrue("Expected that error is displayed on the page after sumbitting application with unsolved captcha");
+            await Console.Out.WriteLineAsync("");
+        }
     }
 }

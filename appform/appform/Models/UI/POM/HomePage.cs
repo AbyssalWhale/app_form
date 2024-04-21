@@ -94,5 +94,11 @@ namespace appform.Models.UI.POM
             var element = await Page.QuerySelectorAsync("//li[text()='Passwords do not match!']");
             return await element.IsVisibleAsync();
         }
+
+        public async Task<bool> IsUnsolvedCaptchaErrorDisplayed()
+        {
+            var element = await Page.QuerySelectorAsync("//li[text()='Please solve the captcha!']");
+            return await element.IsVisibleAsync();
+        }
     }
 }
