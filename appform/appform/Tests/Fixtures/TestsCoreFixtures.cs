@@ -1,4 +1,5 @@
-﻿using Microsoft.Playwright;
+﻿using appform.Models.UI.POM;
+using Microsoft.Playwright;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace appform.Tests.Fixtures
         protected IPlaywright PlaywrightTests;
         protected IBrowser Browser;
         protected IPage Page;
+        protected HomePage HomePage;
 
         [OneTimeSetUp]
         public async Task OneTimeSetup()
@@ -23,7 +25,13 @@ namespace appform.Tests.Fixtures
                 Args = new[] { "--start-maximized" },
                 Headless = false,
             });
-            Page = await Browser.NewPageAsync();
+        }
+
+        [SetUp]
+        public async Task Setup()
+        {
+            HomePage = new HomePage(page: await Browser.NewPageAsync());
+            await HomePage.Navigate();
         }
 
         [OneTimeTearDown]
