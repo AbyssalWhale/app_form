@@ -1,16 +1,20 @@
+using appform.Tests.Fixtures;
+
 namespace appform.Tests.UI
 {
-    public class Tests
+    public class Tests : TestsCoreFixtures
     {
         [SetUp]
-        public void Setup()
+        public async Task Setup()
         {
+            await Page.GotoAsync(url: "https://qa-task.redvike.rocks/");
         }
 
         [Test]
-        public void Test1()
+        public async Task Test1()
         {
             Assert.Pass();
+            await Task.Delay(5000);
         }
     }
 }
