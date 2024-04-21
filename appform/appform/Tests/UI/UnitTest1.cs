@@ -1,4 +1,4 @@
-namespace appform
+namespace appform.Tests.UI
 {
     public class Tests
     {
