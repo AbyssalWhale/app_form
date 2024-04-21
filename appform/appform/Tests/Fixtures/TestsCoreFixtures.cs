@@ -1,4 +1,5 @@
 ﻿using appform.Models.UI.POM;
+using Bogus;
 using Microsoft.Playwright;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace appform.Tests.Fixtures
         protected IBrowser Browser;
         protected IPage Page;
         protected HomePage HomePage;
+        protected Faker Faker;
 
         [OneTimeSetUp]
         public async Task OneTimeSetup()
@@ -25,6 +27,7 @@ namespace appform.Tests.Fixtures
                 Args = new[] { "--start-maximized" },
                 Headless = false,
             });
+            Faker = new Faker();
         }
 
         [SetUp]
