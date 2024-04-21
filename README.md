@@ -1,5 +1,5 @@
 # Solution overview:
-Solution consists of 1 project. It uses .NET 8.0 framework.    
+The solution consists of 1 project. It uses the .NET 8.0 framework.    
 
 # Solution nuget packages:
 - Bogus - to generate test data;
@@ -16,4 +16,13 @@ Solution consists of 1 project. It uses .NET 8.0 framework.
 
 # How to execute:
 https://github.com/AbyssalWhale/app_form/assets/53709071/dd9b7ac2-d6d1-4064-af6f-0c522cead439
+
+# Issues:
+- alert with error messages when trying to submit a form without or invalid first name, last name, and email. I didn't manage to catch the alert since it was missing in the DOM;
+- slider functionality should be improved since it can be easily passed;
+- it's not clear regarding minimum and maximum sizes for first name, last name, and email;
+- it's not clear regarding the requirements for the avatar:
+  - resolution
+  - size
+  - format   
 
